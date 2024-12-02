@@ -26,6 +26,37 @@ fn parse_data(data: String) -> Vec<Vec<i32>> {
     return result;
 }
 
+
+
+fn problem_dampener_detection(data: Vec<i32>) -> i32 {
+    // Check if the values consistently grow/decrease
+    if data[0] > data[1] {
+        for i in 1..data.len() {
+            if data[i] > data[i - 1] {
+            }
+        }
+    } else {
+        for i in 1..data.len() {
+            if data[i] < data[i-1] {
+            }
+        }
+    }
+
+    for i in 1..data.len() {
+        let difference = data[i] - data[i-1];
+        let abs_diff = difference.abs();
+
+        if abs_diff == 0 {
+            return 0;
+        }
+
+        if abs_diff > 3 {
+            return 0;
+        }
+    }
+
+}
+
 fn check_levels(data: Vec<i32>) -> i32 {
     let mut problem_dampener_triggered = false;
     // Check if the values consistently grow/decrease
