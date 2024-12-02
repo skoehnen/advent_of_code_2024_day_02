@@ -172,6 +172,7 @@ mod tests {
 
         let test_fail_1 = vec![1,5,8,12,16];
         let test_fail_2 = vec![16,12,8,5,1];
+        let test_fail_3 = vec![1, 2, 7, 8, 9];
 
         let data_pass_1 = check_levels(test_pass_1);
         let data_pass_2 = check_levels(test_pass_2);
