@@ -27,6 +27,7 @@ fn parse_data(data: String) -> Vec<Vec<i32>> {
 }
 
 fn problem_dampener(data: Vec<i32>, index: usize) -> Vec<i32> {
+    println!("problem_dampener remove item {} with index {}", data[index], index);
     let mut result = data.clone();
     result.remove(index);
     return result;
@@ -37,13 +38,13 @@ fn problem_dampener_detection(data: Vec<i32>) -> Vec<i32> {
     if data[0] > data[1] {
         for i in 1..data.len() {
             if data[i] > data[i - 1] {
-                return problem_dampener(data, i);
+                return problem_dampener(data, i - 1);
             }
         }
     } else {
         for i in 1..data.len() {
             if data[i] < data[i-1] {
-                return problem_dampener(data, i);
+                return problem_dampener(data, i - 1);
             }
         }
     }
@@ -53,11 +54,11 @@ fn problem_dampener_detection(data: Vec<i32>) -> Vec<i32> {
         let abs_diff = difference.abs();
 
         if abs_diff == 0 {
-            return problem_dampener(data, i);
+            return problem_dampener(data, i - 1);
         }
 
         if abs_diff > 3 {
-            return problem_dampener(data, i);
+            return problem_dampener(data, i - 1);
         }
     }
     return data;
@@ -100,9 +101,16 @@ fn check_levels(data: Vec<i32>) -> i32 {
 fn validate_report(data: Vec<Vec<i32>>) -> Vec<i32> {
     let mut result: Vec<i32> = Vec::new();
 
+    let mut line_number = 0;
+
     for line in data {
+        println!("Line-number: {:?}", line_number);
+        println!("{:?}", line);
         result.push(check_levels(line));
+        line_number = line_number + 1;
     }
+
+    println!("{:?}", result);
 
     return result;
 }
@@ -222,7 +230,7 @@ mod tests {
 
         let data = count_safe_reports(validate_report(parse_data(contents)));
 
-        assert_eq!(data, 2);
+        assert_eq!(data, 4);
     }
 
     #[test]
@@ -234,6 +242,6 @@ mod tests {
 
         let data = verify(contents);
 
-        assert_eq!(data, 2);
+        assert_eq!(data, 4);
     }
 }
