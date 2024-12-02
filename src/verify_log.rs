@@ -1,23 +1,22 @@
 pub fn verify(data: String) -> i32 {
-    validate_report(parse_data(data));
-    return 0;
+    return count_safe_reports(validate_report(parse_data(data)));
 }
 
 fn count_safe_reports(report_summary: Vec<i32>) -> i32 {
-    return 0;
+    return report_summary.iter().sum();
 }
 
 fn parse_data(data: String) -> Vec<Vec<i32>> {
     let mut result: Vec<Vec<i32>> = Vec::new();
 
     for line in data.lines() {
-        println!("{}", line);
+        //println!("{}", line);
         let mut inner_vec: Vec<i32> = Vec::new();
 
         let split_data = line.split(" ");
 
         for number in split_data {
-            println!("{}", number);
+            //println!("{}", number);
             inner_vec.push(number.parse::<i32>().unwrap());
         }
 
@@ -28,7 +27,37 @@ fn parse_data(data: String) -> Vec<Vec<i32>> {
 }
 
 fn check_levels(data: Vec<i32>) -> i32 {
-    return 0;
+    // Check if the values consistently grow/decrease
+    if data[0] > data[1] {
+        for i in 1..data.len() {
+            if data[i] > data[i - 1] {
+                return 0;
+            }
+        }
+    } else {
+        for i in 1..data.len() {
+            //println!("{}", data[i]);
+            //println!("{}", data[i - 1]);
+            if data[i] < data[i-1] {
+                return 0;
+            }
+        }
+    }
+
+    for i in 1..data.len() {
+        let difference = data[i] - data[i-1];
+        let abs_diff = difference.abs();
+
+        if abs_diff == 0 {
+            return 0;
+        }
+
+        if abs_diff > 3 {
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 fn validate_report(data: Vec<Vec<i32>>) -> Vec<i32> {
@@ -111,6 +140,59 @@ mod tests {
         assert_eq!(data[1], 0);
         assert_eq!(data[2], 0);
         assert_eq!(data[3], 0);
-        assert_eq!(data[4], 1);
+        assert_eq!(data[4], 0);
+        assert_eq!(data[5], 1);
+    }
+
+    #[test]
+    fn test_check_levels() {
+        let file_path = "data/test.data";
+
+        let contents = fs::read_to_string(file_path)
+            .expect("Should have been able to read the file");
+
+        let test_pass_1 = vec![1,2,3,4,5];
+        let test_pass_2 = vec![5, 4, 3, 2, 1];
+        let test_pass_3 = vec![1, 3, 6, 7, 9];
+
+        let test_fail_1 = vec![1,5,8,12,16];
+        let test_fail_2 = vec![16,12,8,5,1];
+
+        let data_pass_1 = check_levels(test_pass_1);
+        let data_pass_2 = check_levels(test_pass_2);
+        let data_pass_3 = check_levels(test_pass_3);
+
+        let data_fail_1 = check_levels(test_fail_1);
+        let data_fail_2 = check_levels(test_fail_2);
+
+        assert_eq!(data_pass_1, 1);
+        assert_eq!(data_pass_2, 1);
+
+        assert_eq!(data_fail_1, 0);
+        assert_eq!(data_fail_2, 0);
+    }
+
+    #[test]
+    fn test_count_safe_reports() {
+        let file_path = "data/test.data";
+
+        let contents = fs::read_to_string(file_path)
+            .expect("Should have been able to read the file");
+
+        let data = count_safe_reports(validate_report(parse_data(contents)));
+
+        assert_eq!(data, 2);
+    }
+
+    #[test]
+    fn test_verify() {
+        let file_path = "data/test.data";
+
+        let contents = fs::read_to_string(file_path)
+            .expect("Should have been able to read the file");
+
+        let data = verify(contents);
+
+        assert_eq!(data, 2);
     }
 }
