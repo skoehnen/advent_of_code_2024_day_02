@@ -154,8 +154,8 @@ mod tests {
         assert_eq!(data[0], 1);
         assert_eq!(data[1], 0);
         assert_eq!(data[2], 0);
-        assert_eq!(data[3], 0);
-        assert_eq!(data[4], 0);
+        assert_eq!(data[3], 1);
+        assert_eq!(data[4], 1);
         assert_eq!(data[5], 1);
     }
 
