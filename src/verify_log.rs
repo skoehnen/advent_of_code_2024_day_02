@@ -180,12 +180,15 @@ mod tests {
 
         let data_fail_1 = check_levels(test_fail_1);
         let data_fail_2 = check_levels(test_fail_2);
+        let data_fail_3 = check_levels(test_fail_3);
 
         assert_eq!(data_pass_1, 1);
         assert_eq!(data_pass_2, 1);
+        assert_eq!(data_pass_3, 1);
 
         assert_eq!(data_fail_1, 0);
         assert_eq!(data_fail_2, 0);
+        assert_eq!(data_fail_3, 0);
     }
 
     #[test]
