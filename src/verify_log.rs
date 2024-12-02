@@ -26,18 +26,24 @@ fn parse_data(data: String) -> Vec<Vec<i32>> {
     return result;
 }
 
+fn problem_dampener(data: Vec<i32>, index: usize) -> Vec<i32> {
+    let mut result = data.clone();
+    result.remove(index);
+    return result;
+}
 
-
-fn problem_dampener_detection(data: Vec<i32>) -> i32 {
+fn problem_dampener_detection(data: Vec<i32>) -> Vec<i32> {
     // Check if the values consistently grow/decrease
     if data[0] > data[1] {
         for i in 1..data.len() {
             if data[i] > data[i - 1] {
+                return problem_dampener(data, i);
             }
         }
     } else {
         for i in 1..data.len() {
             if data[i] < data[i-1] {
+                return problem_dampener(data, i);
             }
         }
     }
@@ -47,59 +53,44 @@ fn problem_dampener_detection(data: Vec<i32>) -> i32 {
         let abs_diff = difference.abs();
 
         if abs_diff == 0 {
-            return 0;
+            return problem_dampener(data, i);
         }
 
         if abs_diff > 3 {
-            return 0;
+            return problem_dampener(data, i);
         }
     }
-
+    return data;
 }
 
 fn check_levels(data: Vec<i32>) -> i32 {
-    let mut problem_dampener_triggered = false;
+    let clean_data = problem_dampener_detection(data);
+
     // Check if the values consistently grow/decrease
-    if data[0] > data[1] {
-        for i in 1..data.len() {
-            if data[i] > data[i - 1] {
-                if problem_dampener_triggered {
-                    return 0;
-                } else {
-                    problem_dampener_triggered = true;
-                }
+    if clean_data[0] > clean_data[1] {
+        for i in 1..clean_data.len() {
+            if clean_data[i] > clean_data[i - 1] {
+                return 0;
             }
         }
     } else {
-        for i in 1..data.len() {
-            if data[i] < data[i-1] {
-                if problem_dampener_triggered {
-                    return 0;
-                } else {
-                    problem_dampener_triggered = true;
-                }
+        for i in 1..clean_data.len() {
+            if clean_data[i] < clean_data[i-1] {
+                return 0;
             }
         }
     }
 
-    for i in 1..data.len() {
-        let difference = data[i] - data[i-1];
+    for i in 1..clean_data.len() {
+        let difference = clean_data[i] - clean_data[i-1];
         let abs_diff = difference.abs();
 
         if abs_diff == 0 {
-            if problem_dampener_triggered {
-                return 0;
-            } else {
-                problem_dampener_triggered = true;
-            }
+            return 0;
         }
 
         if abs_diff > 3 {
-            if problem_dampener_triggered {
-                return 0;
-            } else {
-                problem_dampener_triggered = true;
-            }
+            return 0;
         }
     }
 
